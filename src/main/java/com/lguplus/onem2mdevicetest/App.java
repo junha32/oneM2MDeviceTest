@@ -1,13 +1,19 @@
 package com.lguplus.onem2mdevicetest;
 
+import java.math.BigInteger;
+
 import com.lguplus.onem2m.device.Onem2mAgent;
 import com.lguplus.onem2m.device.OperationListener;
 import com.lguplus.onem2m.device.attributes.domain.AEAttributes;
 import com.lguplus.onem2m.device.attributes.domain.Attributes;
 import com.lguplus.onem2m.device.attributes.domain.ConditionalRequest;
+import com.lguplus.onem2m.device.attributes.domain.ContainerAttributes;
+import com.lguplus.onem2m.device.attributes.domain.RemoteCSEAttributes;
 import com.lguplus.onem2m.device.common.exception.IotpException;
 import com.lguplus.onem2m.device.resources.domain.AE;
 import com.lguplus.onem2m.device.resources.domain.CSEBase;
+import com.lguplus.onem2m.device.resources.domain.Container;
+import com.lguplus.onem2m.device.resources.domain.RemoteCSE;
 import com.lguplus.onem2m.device.resources.domain.Resource;
 import com.lguplus.onem2m.mef.connector.domain.auth.request.DeviceInfo;
 
@@ -48,8 +54,9 @@ public class App implements OperationListener {
 			deviceInfo.setIccId( "000001" );
 
 			agent.authenticate( deviceInfo );
+			String EntityId = agent.getEntityId();
 		} catch ( IotpException e ) {
-			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+			System.out.println( "Error. Errmedor Code : " + e.getCode() + ", message : " + e.getMessage() );
 		}
 
 		// Retrieve CSEBase
@@ -59,57 +66,119 @@ public class App implements OperationListener {
 		} catch ( IotpException e ) {
 			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
 		}
-
-		// Create AE
+		
+//		// Create RemoteCSE
+//		
+//		try {
+//			RemoteCSEAttributes attributes = new RemoteCSEAttributes();
+//			attributes.setResourceName("csr-ASN_CSEDa73fbf5512PMVT");
+//			attributes.setCseType(new BigInteger("3"));
+//			attributes.setCSEBase("/ASN_CSE-D-a73fbf5512PMVT/cb-1");
+//			attributes.setCSEID("/ASN_CSE-D-a73fbf5512PMVT");
+//			attributes.setRequestReachability(true);
+//			
+//			
+//			RemoteCSE remotecse = (RemoteCSE)agent.create(attributes, "/IN_CSE-BASE-1/cb-1");
+//			System.out.println( "RemoteCSE resource ID: " + remotecse.getResourceID() );
+//			
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+		
+		// Retrieve RemoteCSE
+		
 		try {
-			AEAttributes attributes = new AEAttributes();
-			attributes.setResourceName( "ae-ae_resource_name" );
-			attributes.getLabels().add( "example" );
-			attributes.setAppID( "app_ID" );
-			attributes.setRequestReachability( true );
-
-			attributes.setResourceName( "ae-ae_resource_name" );
-			attributes.setAppID( "api-1" );
-
-			AE ae = (AE)agent.create( attributes, "/IN_CSE-BASE-1/cb-1" );
-			System.out.println( "CSE resource ID: " + ae.getResourceID() );
+			
+			RemoteCSE remotecse = (RemoteCSE)agent.retrieve("/IN_CSE-BASE-1/cb-1/csr-ASN_CSEDa73fbf5512PMVT");
+			System.out.println( "RemoteCSE resource ID: " + remotecse.getResourceID() );
+			
 		} catch ( IotpException e ) {
 			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
 		}
 
-		// Update AE
+//		// Create Container
+//		
+//		try {
+//			ContainerAttributes attributes = new ContainerAttributes();
+//			attributes.setResourceName("cnt-ASN_CSEDa73fbf5512PMVT");
+//			attributes.setMaxNrOfInstances(new Long("3"));
+//			attributes.setMaxByteSize(new Long("4000"));
+//			
+//			Container container = (Container)agent.create(attributes, "/IN_CSE-BASE-1/cb-1/csr-ASN_CSEDa73fbf5512PMVT");
+//			System.out.println( "Container resource ID: " + container.getResourceID() );
+//			
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+		
+//		// Update Container
+//		try {
+//			ContainerAttributes attributes = new ContainerAttributes();
+//			attributes.setResourceName("csn-ASN_CSEDa73fbf5512PMVT");
+//			Container container = (Container)agent.update( attributes, "/IN_CSE-BASE-1/cb-1/ri_cnt-a9a69d1938234cf8a85339f8508d829a" );
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+		
+		// Retrieve Container
+		
 		try {
-			AEAttributes attributes = new AEAttributes();
-			attributes.setAppName( "example" );
-			AE ae = (AE)agent.update( attributes, "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
+			Container container = (Container)agent.retrieve("/IN_CSE-BASE-1/cb-1/csr-ASN_CSEDa73fbf5512PMVT/cnt-ASN_CSEDa73fbf5512PMVT");
+			System.out.println( "Container resource ID: " + container.getResourceID() );
+			
 		} catch ( IotpException e ) {
 			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
 		}
-
-		// Retrieve AE
-		try {
-			AE ae = (AE)agent.retrieve( "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
-			System.out.println( "AE App Name : " + ae.getAppName() );
-		} catch ( IotpException e ) {
-			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
-		}
-
-		// Delete AE
-		try {
-			AE ae = (AE)agent.delete( "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
-		} catch ( IotpException e ) {
-			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
-		}
-
-		// check AE is deleted
-		try {
-			agent.retrieve( "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
-		} catch ( IotpException e ) {
-			if ( e.getCode() == 4004 ) {
-				System.out.println( "AE is deleted" );
-			}
-
-		}
+		
+		
+//		// Create AE
+//		try {
+//			AEAttributes attributes = new AEAttributes();
+//			attributes.setResourceName( "ae-ASN_CSEDa73fbf5512PMVT" );
+//			attributes.getLabels().add( "example" );
+//			attributes.setAppID("api-ae-ASN_CSEDa73fbf5512PMVT");
+//			attributes.setRequestReachability( true );
+//			attributes.setAppName("PMVT");
+//
+//			AE ae = (AE)agent.create( attributes, "/IN_CSE-BASE-1/cb-1/csr-ASN_CSEDa73fbf5512PMVT" );
+//			System.out.println( "CSE resource ID: " + ae.getResourceID() );
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+//
+//		// Update AE
+//		try {
+//			AEAttributes attributes = new AEAttributes();
+//			attributes.setAppName( "example" );
+//			AE ae = (AE)agent.update( attributes, "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+//
+//		// Retrieve AE
+//		try {
+//			AE ae = (AE)agent.retrieve( "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
+//			System.out.println( "AE App Name : " + ae.getAppName() );
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+//
+//		// Delete AE
+//		try {
+//			AE ae = (AE)agent.delete( "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
+//		} catch ( IotpException e ) {
+//			System.out.println( "Error. Error Code : " + e.getCode() + ", message : " + e.getMessage() );
+//		}
+//
+//		// check AE is deleted
+//		try {
+//			agent.retrieve( "/IN_CSE-BASE-1/cb-1/ae-ae_resource_name" );
+//		} catch ( IotpException e ) {
+//			if ( e.getCode() == 4004 ) {
+//				System.out.println( "AE is deleted" );
+//			}
+//
+//		}
 
 		// Finalize
 		try {

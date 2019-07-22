@@ -18,7 +18,7 @@
   	<repository>
         <id>local-repository</id>
         <name>local Repository</name>
-        <url>file://C:\Users\june32\Downloads\Java_Device_SDK\iotp-examples-sdk\iotp-examples-sdk/local_repository</url>
+        <url>file:///Users/jeonjunha/Downloads/oneM2M/Java_Device_SDK/iotp-examples-sdk/local_repository</url>
     </repository>
   </repositories>
 
