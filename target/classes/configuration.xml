@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <devMode>
+  	true
+  </devMode>
+  <network>
+    <server>testbrk.onem2m.uplous.co.kr</server>
+    <port>80</port>
+    <protocol>http</protocol>
+    <timeout>10000</timeout>
+    <listenerPort>9090</listenerPort>
+    <tls>false</tls>
+  </network>
+  <mef>
+  	<server>testmef.onem2m.uplus.co.kr</server>
+  	<port>80</port>
+  	<timeout>10000</timeout>
+  </mef>
+  <extra>
+    <devModel>PMV-DEVICE-TEST</devModel>
+    <nwInfo>10</nwInfo>
+  </extra>
+</config>
